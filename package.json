@@ -6,13 +6,13 @@
   "author": "Saito Nakamura <michael.bashurov@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "yarn lint && yarn test:raw | faucet",
+    "test": "npm run lint && npm run test:raw | faucet",
     "test:raw": "tape -r ts-node/register tests/*.test.js",
     "watch": "tsc --watch --project ./tsconfig.json",
     "build": "tsc --project ./tsconfig.json",
     "build:module": "tsc --project ./tsconfig.module.json",
     "lint": "tsc --project ./tsconfig.json --noEmit",
-    "prepublishOnly": "yarn test && yarn build && yarn build:module"
+    "prepublishOnly": "npm test && npm run build && npm run build:module"
   },
   "keywords": [
     "typescript",
@@ -22,15 +22,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saitonakamura/ts-type-makeup.git"
+    "url": "git+https://github.com/ts-type-makeup/superstruct-ts-transformer.git"
   },
   "bugs": {
-    "url": "https://github.com/saitonakamura/ts-type-makeup/issues"
+    "url": "https://github.com/ts-type-makeup/superstruct-ts-transformer/issues"
   },
-  "homepage": "https://github.com/saitonakamura/ts-type-makeup/tree/master/superstruct-ts-transformer#readme",
+  "homepage": "https://github.com/ts-type-makeup/superstruct-ts-transformer#readme",
   "dependencies": {
     "@types/superstruct": "^0.5.0",
-    "@types/tape": "^4.2.33",
     "superstruct": "^0.6.1",
     "ts-type-visitor": "^0.1.1"
   },
@@ -38,6 +37,7 @@
     "typescript": "^3.5.2"
   },
   "devDependencies": {
+    "@types/tape": "^4.2.33",
     "faucet": "^0.0.1",
     "node-eval": "^2.0.0",
     "tape": "^4.11.0",
