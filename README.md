@@ -64,6 +64,14 @@ Because `tsc` doesn't support custom transformers. It's not a big deal, actually
 
 No more, no less. Everything that's not representable in json or doesn't have a standard represenation is out of the scope of this library, e.g. BigInts, functions, objects with a number indexer. You may want to keep an eye on a custom validators feature though.
 
+## Installation
+
+```bash
+npm i -D superstruct-ts-transformer
+# or
+yarn add --dev superstruct-ts-transformer
+```
+
 ## Usage
 
 ```typescript
