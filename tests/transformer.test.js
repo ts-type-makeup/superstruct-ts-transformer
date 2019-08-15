@@ -4,7 +4,7 @@ const ts = require("typescript");
 const fs = require("fs");
 const {
   createValidatorTransformer
-} = require("superstruct-ts-transformer/transformer");
+} = require("../transformer");
 
 tape("test simple object with string field success", t =>
   shouldPassValidation(t, "test_simpleObjectWithStringField_success.ts", {
