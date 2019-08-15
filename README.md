@@ -1,5 +1,14 @@
 # Superstruct Typescript transformer
 
+<p>
+  <a href="https://www.npmjs.com/package/superstruct-ts-transformer">
+    <img alt="Npm" src="https://img.shields.io/npm/v/superstruct-ts-transformer.svg?style=flat-square" />
+  </a>
+  <a href="https://travis-ci.org/ts-type-makeup/superstruct-ts-transformer?branch=master">
+    <img alt="Travis CI build status" src="https://travis-ci.org/ts-type-makeup/superstruct-ts-transformer.svg?branch=master" />
+  </a>
+</p>
+
 It's a typescript transformer that will transforms `validate<MyType>(JSON.parse("{}"))` calls to an actual [`superstruct` json validator](https://github.com/ianstormtaylor/superstruct)
 
 You write that code:
