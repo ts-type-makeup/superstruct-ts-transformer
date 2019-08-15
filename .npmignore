@@ -1,0 +1,9 @@
+node_modules
+!dist
+!module
+**/*tsbuildinfo
+**/*.tgz
+tests
+webpack-example
+.yarnrc
+tsconfig.module.json

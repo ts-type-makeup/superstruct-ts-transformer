@@ -1,0 +1,19 @@
+{
+  "name": "superstruct-ts-transformer-webpack-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "webpack-cli serve --mode development",
+    "build": "webpack --mode development"
+  },
+  "devDependencies": {
+    "@webpack-cli/serve": "^0.1.8",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.2",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "superstruct-ts-transformer": "^0.1.0"
+  }
+}
