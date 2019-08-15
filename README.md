@@ -58,7 +58,7 @@ Because `tsc` doesn't support custom transformers. It's not a big deal, actually
 
 ### Module target should be `CommonJS`, `ES2015` and `ESNext`
 
-- You can't use other module targets. Also not a show stopper, haven't seen anyone using `UMD` or `AMD` in a while.
+You can't use other module targets. Also not a show stopper, haven't seen anyone using `UMD` or `AMD` in a while.
 
 ### It's only JSON validation
 
