@@ -41,7 +41,7 @@ function validate_User(jsonObj) {
 
 ## ⚠️ Current limitations ⚠️
 
-Please read this carefully as you may miss it and be really dissappointed afterwards
+Please read this carefully as you may miss it and be really disappointed afterward
 
 ### You can't use babel-only transpilation
 
@@ -49,12 +49,12 @@ You can use babel, but you need to compile by typescript first. Babel plugin is 
 
 ### Can express more than types
 
-Currently there's no way to express something more than Typesctipt types. Means you if you want to validate email or uuid, there's no way because there's no way to express this is types.
+Currently, there's no way to express something more than Typescript types. Means you if you want to validate email or UUID, there's no way because there's no way to express this is types.
 There's a plan to support that, using custom type guards, it'll look a bit like [superstruct custom types](https://github.com/ianstormtaylor/superstruct/blob/master/docs/guide.md#defining-custom-data-types)
 
 ### You can't use `tsc`
 
-Because `tsc` doesn't support custom transformers. It's not a big deal, actually, since this package is meant to be used in an application enviroment, and than mean you'll be using `webpack` with `ts-loader`, `ts-node` and other stuff which has the api to inject a loader into.
+Because `tsc` doesn't support custom transformers. It's not a big deal, actually, since this package is meant to be used in an application environment, and then mean you'll be using `webpack` with `ts-loader`, `ts-node` and other stuff which has the API to inject a loader into.
 
 ### Module target should be `CommonJS`, `ES2015` and `ESNext`
 
@@ -62,7 +62,7 @@ You can't use other module targets. Also not a show stopper, haven't seen anyone
 
 ### It's only JSON validation
 
-No more, no less. Everything that's not representable in json or doesn't have a standard represenation is out of the scope of this library, e.g. BigInts, functions, objects with a number indexer. You may want to keep an eye on a custom validators feature though.
+No more, no less. Everything that's not representable in JSON or doesn't have a standard representation is out of the scope of this library, e.g. BigInts, functions, objects with a number indexer. You may want to keep an eye on a custom validators feature though.
 
 ## Installation
 
@@ -110,13 +110,13 @@ Basically just don't be fancy with this function, just import and use it
 
 ## How to integrate custom transformer
 
-The usage itself is really consice, injecting custom transformer can be trickier
+The usage itself is really concise, injecting custom transformer can be trickier
 
 ### Webpack with ts-loader integration
 
 1. Import the transformer
 ```js
-// Mind the destucturing
+// Mind the destructuring
 const {
   createValidatorTransformer
 } = require("superstruct-ts-transformer/dist/transformer");
