@@ -137,7 +137,7 @@ const {
 }
 ```
 Take a look at [`ts-loader` docs](https://github.com/TypeStrong/ts-loader#options) if in hesitation.
-Also take a look at [tiny webpack example](/superstruct-ts-transformer/webpack-example)
+Also take a look at [tiny webpack example](/webpack-example)
 
 ### Webpack with `awesome-typescript-loader` integration
 
