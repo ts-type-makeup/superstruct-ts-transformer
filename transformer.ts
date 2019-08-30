@@ -477,8 +477,19 @@ const findImportedFunctionName = (
     return null;
   }
 
-  return null
+  return null;
 };
+
+function isOurImport(node: ts.ImportDeclaration) {
+  if (ts.isStringLiteral(node.moduleSpecifier)) {
+    if (process.env.SUPERSTRUCT_TS_TRANSFORMER_ENV === "debug") {
+      return node.moduleSpecifier.text == "../index";
+    }
+    return node.moduleSpecifier.text == "superstruct-ts-transformer";
+  }
+
+  return false;
+}
 
 const createVisitor = (
   ctx: ts.TransformationContext,
@@ -490,8 +501,7 @@ const createVisitor = (
 
     if (
       ts.isImportDeclaration(node) &&
-      ts.isStringLiteral(node.moduleSpecifier) &&
-      node.moduleSpecifier.text == "superstruct-ts-transformer" &&
+      isOurImport(node) &&
       !!node.importClause
     ) {
       const nameOfImportedFunction = findImportedFunctionName(
@@ -502,13 +512,6 @@ const createVisitor = (
       if (!!nameOfImportedFunction) {
         importedFunctions.set(node.getSourceFile(), nameOfImportedFunction);
       }
-
-      // const superstructStructNamedImport = ts.createNamedImports([
-      //   ts.createImportSpecifier(
-      //     /* propertyName */ undefined,
-      //     /* name */ ts.createIdentifier("struct")
-      //   )
-      // ]);
 
       const superstructStructImportClause = ts.createImportClause(
         /* name */ ts.createIdentifier("superstruct"),
@@ -589,12 +592,6 @@ const createVisitor = (
         if (node.arguments.length <= 0) {
           return node;
         }
-
-        // if (node.arguments.length <= 2) {
-        //   const a = node.arguments[1];
-        //   const t = checker.getTypeAtLocation(a);
-        //   console.log(JSON.stringify(typeVisitor(checker, t), undefined, " "));
-        // }
 
         const typeToValidateAgainst = checker.getTypeFromTypeNode(
           node.typeArguments[0]
