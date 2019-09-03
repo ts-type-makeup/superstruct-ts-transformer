@@ -1,0 +1,16 @@
+{
+  "name": "ts-node-example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node run.js"
+  },
+  "devDependencies": {
+    "ts-node": "^8.3.0"
+  },
+  "dependencies": {
+    "superstruct-ts-transformer": "^0.1.1"
+  }
+}
