@@ -145,4 +145,4 @@ To be written
 
 ### `ts-node` integration
 
-To be written
+Requires [Introduce programTransformers option PR](https://github.com/TypeStrong/ts-node/pull/879) to be merged
