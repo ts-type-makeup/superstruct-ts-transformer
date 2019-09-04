@@ -20,6 +20,7 @@ module.exports = {
             options: {
               getCustomTransformers: program => ({
                 before: [createValidatorTransformer(program)] // <-- custom transfomer configuration
+                // don't forget that it's an array
               })
             }
           }

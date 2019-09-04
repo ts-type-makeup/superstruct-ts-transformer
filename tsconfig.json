@@ -53,5 +53,5 @@
     // "inlineSourceMap": true,               /* Emit a single file with source maps instead of having a separate file. */
     // "inlineSources": true,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
   },
-  "exclude": ["dist", "module", "tests", "node_modules", "webpack-example"],
+  "exclude": ["dist", "module", "tests", "node_modules", "webpack-example", "ts-node-example"],
 }
