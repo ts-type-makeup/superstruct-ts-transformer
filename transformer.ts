@@ -419,7 +419,7 @@ const createSuperStructValidator = (
     /* multiline */ true
   );
 
-  const asd = ts.createFunctionDeclaration(
+  const validateFunc = ts.createFunctionDeclaration(
     /* decorators */ undefined,
     /* modifiers */ undefined,
     /* asteriskToken */ undefined,
@@ -440,60 +440,22 @@ const createSuperStructValidator = (
     /* body */ body
   );
 
-  return asd;
-  // return ts.createDebuggerStatement()
+  return validateFunc;
 };
-
-// const sett = new Set<[TypeModels, string]>();
 
 type CallToImplement = { typeModel: TypeModel; functionName: string };
 const typeModels = new Map<ts.SourceFile, CallToImplement[]>();
-const importedFunctions = new Map<ts.SourceFile, string>();
 
-const findImportedFunctionName = (
-  importClause: ts.ImportClause,
-  nameToSeek: string
-) => {
-  if (
-    !!importClause.namedBindings &&
-    ts.isNamedImports(importClause.namedBindings)
-  ) {
-    const renamedBinding = importClause.namedBindings.elements.find(
-      x => !!x.propertyName && x.propertyName.text == nameToSeek
-    );
-
-    if (!!renamedBinding) {
-      return renamedBinding.name.text;
-    }
-
-    const originalBinding = importClause.namedBindings.elements.find(
-      x => x.name.text == nameToSeek
-    );
-
-    if (!!originalBinding) {
-      return originalBinding.name.text;
-    }
-
-    return null;
+function isOurModule(moduleName: string) {
+  if (process.env.SUPERSTRUCT_TS_TRANSFORMER_ENV === "debug") {
+    return moduleName == "../index";
   }
-
-  return null;
-};
-
-function isOurImport(node: ts.ImportDeclaration) {
-  if (ts.isStringLiteral(node.moduleSpecifier)) {
-    if (process.env.SUPERSTRUCT_TS_TRANSFORMER_ENV === "debug") {
-      return node.moduleSpecifier.text == "../index";
-    }
-    return node.moduleSpecifier.text == "superstruct-ts-transformer";
-  }
-
-  return false;
+  return moduleName == "superstruct-ts-transformer";
 }
 
 const createVisitor = (
   ctx: ts.TransformationContext,
-  sf: ts.SourceFile,
+  sourceFile: ts.SourceFile,
   checker: ts.TypeChecker
 ) => {
   const visitor: ts.Visitor = (node: ts.Node) => {
@@ -501,18 +463,9 @@ const createVisitor = (
 
     if (
       ts.isImportDeclaration(node) &&
-      isOurImport(node) &&
-      !!node.importClause
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      isOurModule(node.moduleSpecifier.text)
     ) {
-      const nameOfImportedFunction = findImportedFunctionName(
-        node.importClause,
-        "validate"
-      );
-
-      if (!!nameOfImportedFunction) {
-        importedFunctions.set(node.getSourceFile(), nameOfImportedFunction);
-      }
-
       const superstructStructImportClause = ts.createImportClause(
         /* name */ ts.createIdentifier("superstruct"),
         /* named bindings */ undefined
@@ -575,24 +528,26 @@ const createVisitor = (
       return fileNodeWithValidators;
     }
 
-    const sourceFile = node.getSourceFile();
-
-    if (importedFunctions.has(sourceFile)) {
-      const functionName = importedFunctions.get(sourceFile)!;
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      node.typeArguments &&
+      node.typeArguments.length > 0 &&
+      node.arguments.length > 0
+    ) {
+      const sym = checker.getSymbolAtLocation(node.expression);
 
       if (
-        ts.isCallExpression(node) &&
-        ts.isIdentifier(node.expression) &&
-        node.expression.text == functionName
+        !!sym &&
+        sym.declarations.some(
+          decl =>
+            ts.isNamedImports(decl.parent) &&
+            ts.isImportClause(decl.parent.parent) &&
+            ts.isImportDeclaration(decl.parent.parent.parent) &&
+            ts.isStringLiteral(decl.parent.parent.parent.moduleSpecifier) &&
+            isOurModule(decl.parent.parent.parent.moduleSpecifier.text)
+        )
       ) {
-        if (!node.typeArguments || node.typeArguments.length <= 0) {
-          return node;
-        }
-
-        if (node.arguments.length <= 0) {
-          return node;
-        }
-
         const typeToValidateAgainst = checker.getTypeFromTypeNode(
           node.typeArguments[0]
         );
@@ -604,6 +559,8 @@ const createVisitor = (
           .replace(/\]/g, "_ENDARRAY")
           .replace(/\s/g, "_")
           .replace(/[\,]/g, "");
+
+        const functionName = node.expression.text;
 
         const newFunctionName = `${functionName}_${typeToValidateAgainstStr}`;
 
