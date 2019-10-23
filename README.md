@@ -54,11 +54,11 @@ There's a plan to support that, using custom type guards, it'll look a bit like 
 
 ### You can't use `tsc`
 
-Because `tsc` doesn't support custom transformers. It's not a big deal, actually, since this package is meant to be used in an application environment, and then mean you'll be using `webpack` with `ts-loader`, `ts-node` and other stuff which has the API to inject a loader into.
+You need to use [ttypescript](`https://github.com/cevek/ttypescript`), because `tsc` doesn't support custom transformers.
 
 ### Module target should be `CommonJS`, `ES2015` and `ESNext`
 
-You can't use other module targets. Also not a show stopper, haven't seen anyone using `UMD` or `AMD` in a while.
+You can't use other module targets. Also not a show stopper, haven't seen anyone using `UMD` or `AMD` for applications.
 
 ### It's only JSON validation
 
@@ -145,4 +145,32 @@ To be written
 
 ### `ts-node` integration
 
-Requires [Introduce programTransformers option PR](https://github.com/TypeStrong/ts-node/pull/879) to be merged
+1. Create a `run.js` wrapper to pass the transformer programmatically
+```
+const {
+  createValidatorTransformer
+} = require("superstruct-ts-transformer/dist/transformer");
+
+// This is the almost the same at using `ts-node` or `node -r ts-node/register`
+// However it allows us to pass transformers
+// This should be executed before you start requiring ts and tsx files 
+require("ts-node").register({
+  programTransformers: program => ({
+    before: [createValidatorTransformer(program)] // <-- custom transfomer configuration
+    // don't forget that it's an array
+  })
+});
+
+// require your real entrypoint
+require("./index.ts");
+```
+2. Make use of that script by directly passing it to node, instead of using `ts-node`
+If you need to pass specifically options to `ts-node` do it in `run.js` in `register` call
+```
+// package.json
+"scripts": {
+  "start": "node run.js"
+}
+```
+
+In doubt take a look at [tiny ts-node example](/ts-node-example)
