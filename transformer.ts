@@ -31,8 +31,7 @@ type SuperstructType =
   | "weakset";
 
 type SuperstructFunc =
-  | "any"
-  | "dict"
+  | "array"
   | "enum"
   | "function"
   | "instance"
@@ -40,11 +39,11 @@ type SuperstructFunc =
   | "intersection"
   | "lazy"
   | "dynamic"
-  | "list"
   | "literal"
   | "object"
   | "optional"
-  | "partial"
+  | "pick"
+  | "record"
   | "scalar"
   | "tuple"
   | "union";
@@ -290,7 +289,7 @@ const createSuperStructValidatorForm = (
       } else {
         return wrapOptionalOrNonStrictNullCheck({
           exp: createSuperstructCall({
-            func: "dict",
+            func: "record",
             args: [
               ts.createArrayLiteral([
                 createSuperStructValidatorForm(typeModel.keyType, false, true),
@@ -345,7 +344,7 @@ const createSuperStructValidatorForm = (
     case "array":
       return wrapOptionalOrNonStrictNullCheck({
         exp: createSuperstructCall({
-          func: "list",
+          func: "array",
           args: [
             ts.createArrayLiteral([
               createSuperStructValidatorForm(
