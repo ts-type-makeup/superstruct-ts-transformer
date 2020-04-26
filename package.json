@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/ts-type-makeup/superstruct-ts-transformer#readme",
   "dependencies": {
-    "@types/superstruct": "^0.8.2",
     "superstruct": "^0.8.3",
     "ts-type-visitor": "^0.1.1"
   },
