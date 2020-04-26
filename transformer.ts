@@ -465,11 +465,6 @@ const createVisitor = (
       ts.isStringLiteral(node.moduleSpecifier) &&
       isOurModule(node.moduleSpecifier.text)
     ) {
-      const superstructStructImportClause = ts.createImportClause(
-        /* name */ ts.createIdentifier("superstruct"),
-        /* named bindings */ undefined
-      );
-
       const moduleTarget = ctx.getCompilerOptions().module;
 
       if (moduleTarget === ts.ModuleKind.CommonJS) {
@@ -491,8 +486,15 @@ const createVisitor = (
         moduleTarget === ts.ModuleKind.ES2015 ||
         moduleTarget === ts.ModuleKind.ESNext
       ) {
+        const superstructStructImportClause = ts.createImportClause(
+          /* name */ undefined,
+          /* named bindings */ ts.createNamespaceImport(
+            /* name */ ts.createIdentifier("superstruct")
+          )
+        );
+
         return ts.createImportDeclaration(
-          /* decorators */ node.decorators,
+          /* decorators */ undefined,
           /* modifiers */ node.modifiers,
           /* import clause */ superstructStructImportClause,
           /* module specifier */ ts.createStringLiteral("superstruct")
