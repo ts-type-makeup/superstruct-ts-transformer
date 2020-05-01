@@ -443,7 +443,6 @@ const createSuperStructValidator = (
 };
 
 type CallToImplement = { typeModel: TypeModel; functionName: string };
-const typeModels = new Map<ts.SourceFile, CallToImplement[]>();
 
 function isOurModule(moduleName: string) {
   if (process.env.SUPERSTRUCT_TS_TRANSFORMER_ENV === "debug") {
@@ -457,6 +456,8 @@ const createVisitor = (
   sourceFile: ts.SourceFile,
   checker: ts.TypeChecker
 ) => {
+  const typeModels = new Map<ts.SourceFile, CallToImplement[]>();
+
   const visitor: ts.Visitor = (node: ts.Node) => {
     const pass = () => ts.visitEachChild(node, visitor, ctx);
 

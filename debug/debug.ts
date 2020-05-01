@@ -24,5 +24,14 @@ function compile(filenames: string[], options: ts.CompilerOptions) {
     });
 
     console.log(output.outputText);
+
+    const output2 = ts.transpileModule(sourceText, {
+      compilerOptions: options,
+      transformers: {
+        before: [createValidatorTransformer(program)]
+      }
+    });
+
+    console.log(output2.outputText);
   });
 }
