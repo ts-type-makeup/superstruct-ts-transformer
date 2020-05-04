@@ -27,7 +27,7 @@ const obj = validate<User>(JSON.parse('{ "name": "Me", "alive": true }'));
 and it will become when you'll compile it
 
 ```js
-import superstruct from "superstruct";
+import * as superstruct from "superstruct";
 var obj = validate_User(JSON.parse('{ "name": "Me", "alive": true }'));
 
 function validate_User(jsonObj) {
