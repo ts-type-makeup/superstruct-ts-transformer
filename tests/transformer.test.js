@@ -2,9 +2,7 @@ const tape = require("tape");
 const nodeEval = require("node-eval");
 const ts = require("typescript");
 const fs = require("fs");
-const {
-  createValidatorTransformer
-} = require("../transformer");
+const { createValidatorTransformer } = require("../transformer");
 
 tape("test simple object with string field success", t =>
   shouldPassValidation(t, "test_simpleObjectWithStringField_success.ts", {
@@ -416,6 +414,18 @@ tape(
 
 tape("test array with number, success", t =>
   shouldPassValidation(t, "test_arrayWithNumber_success.ts", [123, 321])
+);
+
+tape("test custom validator, success", t =>
+  shouldPassValidation(
+    t,
+    "test_customValidator_success.ts",
+    "a4e1b0cf-2a08-4297-83f3-4db896d7e0fb"
+  )
+);
+
+tape("test custom validator, fail", t =>
+  shouldThrowError(t, "test_customValidator_fail.ts")
 );
 
 /**

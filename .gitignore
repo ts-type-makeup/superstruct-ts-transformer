@@ -1,3 +1,4 @@
 dist
 module
 node_modules
+debug/*.js

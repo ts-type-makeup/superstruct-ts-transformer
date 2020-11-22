@@ -47,11 +47,6 @@ Please read this carefully as you may miss it and be really disappointed afterwa
 
 You can use babel, but you need to compile by typescript first. Babel plugin is in plans, but not the top priority right now.
 
-### Can express more than types
-
-Currently, there's no way to express something more than Typescript types. Means you if you want to validate email or UUID, there's no way because there's no way to express this is types.
-There's a plan to support that, using custom type guards, it'll look a bit like [superstruct custom types](https://github.com/ianstormtaylor/superstruct/blob/master/docs/guide.md#defining-custom-data-types)
-
 ### You can't use `tsc`
 
 You need to use [ttypescript](`https://github.com/cevek/ttypescript`), because `tsc` doesn't support custom transformers.
@@ -87,6 +82,43 @@ type User = {
 // You call this validate function passing your type as generic
 // and json parse result as an argument
 const obj = validate<User>(JSON.parse('{ "name": "Me", "alive": true }'));
+```
+
+### Custom validators
+
+You can pass custom validators array as second argument. This custom validator should comply with 2 rules
+
+* They must be [user-defined type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards) and for 
+* For primitives (`string`, `number`, `bool`) they must be nominal (`type Uuid = string` won't do, typescript will see it as just `string`, rather than unique type).
+There's no official way to do this, but you [hack your way through](https://basarat.gitbook.io/typescript/main-1/nominaltyping)
+
+```typescript
+// Import validate as usual
+import { validate } from "superstruct-ts-transformer";
+
+// Define a brand type
+// Right here I'm using a different kind of brand hack, feel free to use any
+type Uuid = string & { readonly __brand: unique symbol };
+
+const uuidRegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+// Define user-defined type guard that returns `value is Uuid` (value is name of an argument, Uuid is your brand type)
+const isUuid = (value: unknown): value is Uuid =>
+  typeof value === "string" && !!value && uuidRegExp.test(value);
+
+// You can also wrap imported function as user-defined type guards, e.g.
+// import _isUuid from 'is-uuid'
+// const isUuid = (value: unknown): value is Uuid => _isUuid
+
+// Use this brand type
+type TestType = { id: Uuid };
+
+// Call validate function passing isUuis as second parameter array element
+export const obj = validate<TestType>( w
+  JSON.parse('{ "id": "a4e1b0cf-2a08-4297-83f3-4db896d7e0fb" }'),
+  [isUuid]
+);
+// Transformer will use isUuid function when it will encounter Uuid type
 ```
 
 ### ⚠️ Usage limitations ⚠️
